@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
@@ -6,12 +7,35 @@ public class PlayerController : MonoBehaviour
 {
     public float speed = 40f;
     public int health = 5;
+
+    /// <summary>
+    /// keeps reference to text element.
+    /// </summary>
+    public TextMeshProUGUI scoreText;
+
+    /// <summary>
+    /// keeps reference to health text element
+    /// </summary>
+    public TextMeshProUGUI healthText;
+    
     private Rigidbody rb;
 
     private int score = 0;
 
     private float horizontal;
     private float vertical;
+
+
+
+    void SetScoreText()
+    {
+        scoreText.text = "Score : " + score;
+    }
+
+    void SetHealth()
+    {
+        healthText.text = "Health : " + health;
+    }
 
     private void Start()
     {
@@ -50,14 +74,14 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Pickup"))
         {
             score++;
-            Debug.Log("score : " + score);
+            SetScoreText();
             Destroy(other.gameObject);
         }
 
         if (other.CompareTag("Trap"))
         {
             health--;
-            Debug.Log("Health: " + health);
+            SetHealth();
         }
 
         if (other.CompareTag("Goal"))
