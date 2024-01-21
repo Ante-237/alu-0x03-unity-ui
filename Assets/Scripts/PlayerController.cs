@@ -1,12 +1,14 @@
+using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     public float speed = 40f;
-    public int health = 5;
+    public int health = 4;
 
     /// <summary>
     /// keeps reference to text element.
@@ -17,6 +19,11 @@ public class PlayerController : MonoBehaviour
     /// keeps reference to health text element
     /// </summary>
     public TextMeshProUGUI healthText;
+
+    /// <summary>
+    /// reference to win use canvas panle
+    /// </summary>
+    public GameObject WinLooseUI;
     
     private Rigidbody rb;
 
@@ -34,6 +41,10 @@ public class PlayerController : MonoBehaviour
 
     void SetHealth()
     {
+        if (health < 0)
+        {
+            health = 0;
+        }
         healthText.text = "Health : " + health;
     }
 
@@ -44,17 +55,21 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Time.frameCount % 10 == 0)
-        {
-            if (health <= 0)
-            {
-                Debug.Log("Game Over!");
-                health = 5;
-                score = 0;
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-        }
+       
     }
+
+    
+    IEnumerator LoadScene(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        health = 5;
+        score = 0;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    
+    
+    
+    
 
     public void FixedUpdate()
     {
@@ -80,13 +95,45 @@ public class PlayerController : MonoBehaviour
 
         if (other.CompareTag("Trap"))
         {
+            
             health--;
+            if (health <= 0)
+            {
+                SetGameOverUI();
+                StartCoroutine(LoadScene(3.0f));
+            }
             SetHealth();
         }
 
         if (other.CompareTag("Goal"))
         {
-            Debug.Log("You win!");
+            SetWinUI();
+            StartCoroutine(LoadScene(3.0f));
         }
+    }
+
+    private void SetWinUI()
+    {
+        WinLooseUI.SetActive(true);
+        Image currentImage = WinLooseUI.GetComponent<Image>();
+        TextMeshProUGUI uiText = WinLooseUI.GetComponentInChildren<TextMeshProUGUI>();
+        uiText.text = "You Win!";
+        currentImage.color = new Color(0, 1, 0, 1);
+        uiText.color = new Color(0, 0, 0, 1);
+        
+    }
+
+    private void SetGameOverUI()
+    {
+        WinLooseUI.SetActive(true);
+        Image currentImage = WinLooseUI.GetComponent<Image>();
+        TextMeshProUGUI uiText = WinLooseUI.GetComponentInChildren<TextMeshProUGUI>();
+        uiText.text = "Game Over!";
+        currentImage.color = new Color(1, 0, 0, 1);
+        uiText.color = new Color(1, 1, 1, 1);
+        
+        
+        health = 5;
+        score = 0;
     }
 }

@@ -2407,9 +2407,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 400
-  health: 5
+  health: 4
   scoreText: {fileID: 1246779758}
   healthText: {fileID: 1317399856}
+  WinLooseUI: {fileID: 711603235}
 --- !u!54 &687224180
 Rigidbody:
   m_ObjectHideFlags: 0
