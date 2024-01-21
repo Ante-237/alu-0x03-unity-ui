@@ -55,10 +55,27 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-       
+       LoadMainMenu();
+    }
+
+    /// <summary>
+    /// loads the main menu scene if escape key is pressed.
+    /// </summary>
+    private void LoadMainMenu()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("menu");
+        }
     }
 
     
+    
+    /// <summary>
+    /// reloads current scene while reseting various settings
+    /// </summary>
+    /// <param name="seconds"> the amount of time to wait before scene is loaded </param>
+    /// <returns></returns>
     IEnumerator LoadScene(float seconds)
     {
         yield return new WaitForSeconds(seconds);
@@ -76,7 +93,9 @@ public class PlayerController : MonoBehaviour
         PlayerMovements();
     }
 
-
+    /// <summary>
+    /// player movements mapping
+    /// </summary>
     public void PlayerMovements()
     {
         horizontal = Input.GetAxisRaw("Horizontal");
@@ -84,6 +103,11 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(new Vector3(horizontal, 0, vertical) * (speed * Time.deltaTime), ForceMode.Acceleration);
     }
 
+    
+    /// <summary>
+    /// handles collision with objects
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Pickup"))
@@ -112,6 +136,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    
+    /// <summary>
+    /// enables the win canvas menu with right settings
+    /// </summary>
     private void SetWinUI()
     {
         WinLooseUI.SetActive(true);
@@ -123,6 +151,10 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    
+    /// <summary>
+    /// enables the gameover canvas menu with right settings
+    /// </summary>
     private void SetGameOverUI()
     {
         WinLooseUI.SetActive(true);
