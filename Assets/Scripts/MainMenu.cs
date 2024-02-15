@@ -36,7 +36,4 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("maze");
     }
     
-    
-    
-    
 }
